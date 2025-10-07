@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Jadwal extends Model
 {
     protected $table = 'jadwals';
-    protected $fillable = ['kereta_id', 'stasiun_awal', 'stasiun_akhir', 'tanggal', 'jam_berangkat', 'jam_sampai', 'harga'];
+    protected $fillable = ['kereta_id', 'stasiun_awal', 'stasiun_akhir', 'jam_berangkat', 'jam_sampai', 'harga'];
 
     public function kereta(): BelongsTo
     {
@@ -19,6 +19,11 @@ class Jadwal extends Model
     public function pemesanans(): HasMany
     {
         return $this->hasMany(Pemesanan::class);
+    }
+
+    public function gerbongs()
+    {
+        return $this->kereta->gerbongs();
     }
 
     protected $casts = [

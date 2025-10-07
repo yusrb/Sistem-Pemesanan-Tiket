@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('nik', 20)->unique();
             $table->string('no_telepon', 15)->nullable();
             $table->string('password');
+            $table->string('api_token', 80)->unique()->nullable();
             $table->enum('role', ['penumpang', 'petugas', 'admin'])->default('penumpang');
+            $table->string('foto')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
 

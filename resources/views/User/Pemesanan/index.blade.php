@@ -63,7 +63,9 @@
                 <thead class="bg-indigo-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pengguna</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kereta</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jadwal</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jumlah Penumpang</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total Harga</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
@@ -74,7 +76,9 @@
                     @forelse ($pemesanans as $pemesanan)
                         <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('pemesanan.show', $pemesanan) }}'">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemesanan->user->nama }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $pemesanan->jadwal->kereta->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $pemesanan->jadwal->stasiun_awal }} - {{ $pemesanan->jadwal->stasiun_akhir }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ \Carbon\Carbon::parse($pemesanan->tanggal)->format('d/m/Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $pemesanan->jumlah_penumpang }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ ucfirst($pemesanan->status) }}</td>
@@ -91,14 +95,14 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada pemesanan ditemukan.</td>
+                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada pemesanan.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="p-6 border-t border-gray-200">
-            {{ $pemesanans->appends(['search' => $search, 'status' => $status])->links('pagination::tailwind') }}
+        <div class="mt-4">
+            {{ $pemesanans->links() }}
         </div>
     </div>
 </main>

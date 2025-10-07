@@ -28,7 +28,7 @@
 
     <div class="bg-white rounded-xl p-6 shadow-lg mb-6 hover:bg-gray-50 transition">
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <form method="GET" action="{{ route('gerbong.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            <form method="GET" action="{{ route('admin.gerbong.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ $search }}" placeholder="Cari kode gerbong..." class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                 </div>
@@ -42,7 +42,7 @@
                 </div>
                 <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Cari</button>
             </form>
-            <a href="{{ route('gerbong.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
+            <a href="{{ route('admin.gerbong.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
@@ -64,14 +64,14 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($gerbongs as $gerbong)
-                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('gerbong.show', $gerbong) }}'">
+                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('admin.gerbong.show', $gerbong) }}'">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $gerbong->kode_gerbong }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $gerbong->kereta->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $gerbong->jumlah_kursi }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('gerbong.edit', $gerbong) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
-                                    <form action="{{ route('gerbong.destroy', $gerbong) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus gerbong {{ $gerbong->kode_gerbong }}?');">
+                                    <a href="{{ route('admin.gerbong.edit', $gerbong) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
+                                    <form action="{{ route('admin.gerbong.destroy', $gerbong) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus gerbong {{ $gerbong->kode_gerbong }}?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
@@ -150,7 +150,7 @@
             });
         }
 
-        const tambahButton = document.querySelector('a[href="{{ route('gerbong.create') }}"]');
+        const tambahButton = document.querySelector('a[href="{{ route('admin.gerbong.create') }}"]');
         if (tambahButton) {
             tambahButton.addEventListener('click', () => {
                 showNotification('Menuju tambah gerbong', 'info');

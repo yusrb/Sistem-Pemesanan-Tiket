@@ -12,6 +12,7 @@ class PenumpangSeeder extends Seeder
         Penumpang::create([
             'nik' => '1234567890123456',
             'nama' => 'John Doe',
+            'user_id' => 1,
         ]);
     }
 }

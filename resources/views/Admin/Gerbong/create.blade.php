@@ -30,7 +30,7 @@
 
     <!-- Form -->
     <div class="bg-white rounded-xl p-6 shadow-lg hover:bg-gray-50 transition">
-        <form action="{{ route('gerbong.store') }}" method="POST">
+        <form action="{{ route('admin.gerbong.store') }}" method="POST">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="mt-6 flex gap-3">
-                <a href="{{ route('gerbong.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
+                <a href="{{ route('admin.gerbong.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
                 <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Simpan Gerbong</button>
             </div>
         </form>

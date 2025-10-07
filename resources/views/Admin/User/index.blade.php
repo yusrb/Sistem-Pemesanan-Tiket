@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
-@section('judul', 'Daftar User - Manajemen Tiket Kereta')
+@section('judul', 'Daftar User - KAI')
 
 @section('konten')
 <main class="container mx-auto px-4 py-8 max-w-7xl">
-    <div class="mb-8">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+
+        <div class="mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
                     <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,8 +16,7 @@
                 </h1>
                 <p class="text-gray-600">Kelola data pengguna, <span class="font-semibold">{{ now()->format('d F Y') }}</span></p>
             </div>
-            <div class="mt-4 sm:mt-0">
-                <div class="flex items-center space-x-2 text-sm text-gray-600" data-clock>
+                <div class="mt-4 sm:mt-0 flex items-center space-x-2 text-sm text-gray-600" data-clock>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -24,73 +24,80 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="bg-white rounded-xl p-6 shadow-lg mb-6 hover:bg-gray-50 transition">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <form method="GET" action="{{ route('user.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
-                <div class="flex-1">
-                    <input type="text" name="search" value="{{ $search }}" placeholder="Cari nama atau NIK..." class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <select name="role" class="border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                        <option value="">Semua Role</option>
-                        <option value="penumpang" {{ $role == 'penumpang' ? 'selected' : '' }}>Penumpang</option>
-                        <option value="petugas" {{ $role == 'petugas' ? 'selected' : '' }}>Petugas</option>
-                        <option value="admin" {{ $role == 'admin' ? 'selected' : '' }}>Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Cari</button>
-            </form>
-            <a href="{{ route('user.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                </svg>
-                <span>Tambah User</span>
-            </a>
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6 hover:bg-gray-50 transition">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                <form method="GET" action="{{ route('admin.user.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <input type="text" name="search" value="{{ $search }}" placeholder="Cari nama, email, atau NIK..." class="w-full pl-10 pr-3 py-2 border {{ $errors->has('search') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <select name="role" class="border {{ $errors->has('role') ? 'border-red-500' : 'border-blue-300' }} rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Role</option>
+                            <option value="penumpang" {{ $role == 'penumpang' ? 'selected' : '' }}>Penumpang</option>
+                            <option value="petugas" {{ $role == 'petugas' ? 'selected' : '' }}>Petugas</option>
+                            <option value="admin" {{ $role == 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition transform hover:scale-105">Cari</button>
+                </form>
+                <a href="{{ route('admin.user.create') }}" class="bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-blue-800 transition transform hover:scale-105">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <span>Tambah User</span>
+                </a>
+            </div>
         </div>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-indigo-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIK</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No Telepon</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse ($users as $user)
-                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('user.show', $user) }}'">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->nama }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->nik }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->no_telepon ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ ucfirst($user->role) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('user.edit', $user) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
-                                    <form action="{{ route('user.destroy', $user) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus user {{ $user->nama }}?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-50">
                         <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada user ditemukan.</td>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIK</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No Telepon</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="p-6 border-t border-gray-200">
-            {{ $users->appends(['search' => $search, 'role' => $role])->links('pagination::tailwind') }}
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse ($users as $user)
+                            <tr class="hover:bg-blue-50 transition cursor-pointer" onclick="window.location='{{ route('admin.user.show', $user) }}'">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->nama }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->nik }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->no_telepon ?? '-' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ ucfirst($user->role) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('admin.user.edit', $user) }}" onclick="event.stopPropagation()" class="text-blue-600 hover:text-blue-800 hover:underline">Edit</a>
+                                        <form action="{{ route('admin.user.destroy', $user) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus user {{ $user->nama }}?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada user ditemukan.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-6 border-t border-gray-200">
+                {{ $users->appends(['search' => $search, 'role' => $role])->links('pagination::tailwind') }}
+            </div>
         </div>
     </div>
 </main>
@@ -109,12 +116,11 @@
 
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 transition-all duration-500 transform translate-x-full max-w-sm border`;
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-500 transform translate-x-full max-w-sm border`;
             const colors = {
                 success: 'bg-green-50 text-green-700 border-green-200',
                 error: 'bg-red-50 text-red-700 border-red-200',
-                warning: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-                info: 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                info: 'bg-blue-50 text-blue-700 border-blue-200'
             };
             notification.classList.add(...colors[type].split(' '));
             notification.innerHTML = `
@@ -152,7 +158,7 @@
             });
         }
 
-        const tambahButton = document.querySelector('a[href="{{ route('user.create') }}"]');
+        const tambahButton = document.querySelector('a[href="{{ route('admin.user.create') }}"]');
         if (tambahButton) {
             tambahButton.addEventListener('click', () => {
                 showNotification('Menuju tambah user', 'info');

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pemesanan_id')->constrained()->onDelete('cascade');
             $table->foreignId('penumpang_id')->constrained()->onDelete('cascade');
-            $table->foreignId('gerbong_id')->constrained('gerbongs')->onDelete('restrict');
+            $table->foreignId('gerbong_id')->constrained('gerbongs')->onDelete('cascade');
             $table->string('kode', 50)->unique();
             $table->enum('status', ['booked', 'checked_in', 'boarded', 'completed', 'cancelled'])->default('booked');
             $table->timestamps();

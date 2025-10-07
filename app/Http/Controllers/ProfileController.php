@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controller;
 
 class ProfileController extends Controller
@@ -29,6 +30,7 @@ class ProfileController extends Controller
             'nik' => 'required|string|max:16|unique:users,nik,' . $user->id,
             'no_telepon' => 'nullable|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -36,6 +38,14 @@ class ProfileController extends Controller
         $user->nik = $validated['nik'];
         $user->no_telepon = $validated['no_telepon'];
         $user->email = $validated['email'];
+
+        if ($request->hasFile('foto')) {
+            if ($user->foto) {
+                Storage::disk('public')->delete($user->foto);
+            }
+            $path = $request->file('foto')->store('profile_photos', 'public');
+            $user->foto = $path;
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($validated['password']);

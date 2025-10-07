@@ -15,11 +15,9 @@ return new class extends Migration
             $table->foreignId('kereta_id')->constrained()->onDelete('cascade');
             $table->string('stasiun_awal', 100);
             $table->string('stasiun_akhir', 100);
-            $table->date('tanggal');
             $table->time('jam_berangkat');
             $table->time('jam_sampai');
             $table->decimal('harga', 10, 2);
-            $table->index('tanggal');
             $table->timestamps();
         });
     }

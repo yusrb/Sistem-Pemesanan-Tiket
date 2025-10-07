@@ -27,7 +27,7 @@
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-lg hover:bg-gray-50 transition">
-        <form action="{{ route('jadwal.update', $jadwal) }}" method="POST">
+        <form action="{{ route('admin.jadwal.update', $jadwal) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,18 +52,13 @@
                     @error('stasiun_akhir') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label for="tanggal" class="block text-sm font-semibold text-gray-600 mb-2">Tanggal</label>
-                    <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal', $jadwal->tanggal->format('Y-m-d') ) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                    @error('tanggal') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
                     <label for="jam_berangkat" class="block text-sm font-semibold text-gray-600 mb-2">Jam Berangkat</label>
-                    <input type="time" name="jam_berangkat" id="jam_berangkat" value="{{ old('jam_berangkat', $jadwal->jam_berangkat) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
+                    <input type="time" name="jam_berangkat" id="jam_berangkat" value="{{ old('jam_berangkat', \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i')) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                     @error('jam_berangkat') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="jam_sampai" class="block text-sm font-semibold text-gray-600 mb-2">Jam Sampai</label>
-                    <input type="time" name="jam_sampai" id="jam_sampai" value="{{ old('jam_sampai', $jadwal->jam_sampai) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
+                    <input type="time" name="jam_sampai" id="jam_sampai" value="{{ old('jam_sampai', \Carbon\Carbon::parse($jadwal->jam_sampai)->format('H:i')) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                     @error('jam_sampai') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
@@ -73,7 +68,7 @@
                 </div>
             </div>
             <div class="mt-6 flex gap-3">
-                <a href="{{ route('jadwal.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
+                <a href="{{ route('admin.jadwal.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
                 <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Perbarui Jadwal</button>
             </div>
         </form>
@@ -121,7 +116,7 @@
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', () => {
-                showNotification('Memperbarui jadwal', 'info');
+                showNotification('Memperbarui jadwal.', 'info');
             });
         }
 

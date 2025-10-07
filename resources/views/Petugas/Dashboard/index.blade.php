@@ -65,7 +65,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ ucfirst($pemesanan->status) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="{{ route('pemesanan.show', $pemesanan) }}" class="text-indigo-600 hover:text-indigo-800 hover:underline">Detail</a>
+                                    <a href="{{ route('petugas.pemesanan.show', $pemesanan) }}" class="text-indigo-600 hover:text-indigo-800 hover:underline">Detail</a>
                                     <a href="{{ route('pemesanan.edit', $pemesanan) }}" class="text-indigo-600 hover:text-indigo-800 hover:underline ml-2">Edit</a>
                                 </td>
                             </tr>

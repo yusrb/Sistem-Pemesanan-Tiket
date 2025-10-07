@@ -21,7 +21,8 @@ class UserController extends Controller
         $role = $request->query('role');
         $users = User::when($search, function ($query, $search) {
                 return $query->where('nama', 'like', "%{$search}%")
-                            ->orWhere('nik', 'like', "%{$search}%");
+                            ->orWhere('nik', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
             })
             ->when($role, function ($query, $role) {
                 return $query->where('role', $role);
@@ -40,6 +41,7 @@ class UserController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:100',
+            'email' => 'required|email|max:60|unique:users,email',
             'nik' => 'required|string|max:20|unique:users,nik',
             'no_telepon' => 'nullable|string|max:15',
             'password' => 'required|string|min:8',
@@ -48,13 +50,14 @@ class UserController extends Controller
 
         User::create([
             'nama' => $request->nama,
+            'email' => $request->email,
             'nik' => $request->nik,
             'no_telepon' => $request->no_telepon,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
-        return redirect()->route('user.index')->with('sukses', 'User berhasil ditambahkan.');
+        return redirect()->route('admin.user.index')->with('sukses', 'User berhasil ditambahkan.');
     }
 
     public function show(User $user)
@@ -71,6 +74,7 @@ class UserController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:100',
+            'email' => 'required|email|max:60|unique:users,email,' . $user->id,
             'nik' => 'required|string|max:20|unique:users,nik,' . $user->id,
             'no_telepon' => 'nullable|string|max:15',
             'password' => 'nullable|string|min:8',
@@ -79,6 +83,7 @@ class UserController extends Controller
 
         $data = [
             'nama' => $request->nama,
+            'email' => $request->email,
             'nik' => $request->nik,
             'no_telepon' => $request->no_telepon,
             'role' => $request->role,
@@ -90,13 +95,13 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('user.index')->with('sukses', 'User berhasil diperbarui.');
+        return redirect()->route('admin.user.index')->with('sukses', 'User berhasil diperbarui.');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return redirect()->route('user.index')->with('sukses', 'User berhasil dihapus.');
+        return redirect()->route('admin.user.index')->with('sukses', 'User berhasil dihapus.');
     }
 }

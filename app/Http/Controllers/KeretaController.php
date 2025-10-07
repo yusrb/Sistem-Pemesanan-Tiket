@@ -39,7 +39,7 @@ class KeretaController extends Controller
 
         Kereta::create($request->all());
 
-        return redirect()->route('kereta.index')->with('sukses', 'Kereta berhasil ditambahkan.');
+        return redirect()->route('admin.kereta.index')->with('sukses', 'Kereta berhasil ditambahkan.');
     }
 
     public function show(Kereta $kereta)
@@ -61,13 +61,13 @@ class KeretaController extends Controller
 
         $kereta->update($request->all());
 
-        return redirect()->route('kereta.index')->with('sukses', 'Kereta berhasil diperbarui.');
+        return redirect()->route('admin.kereta.index')->with('sukses', 'Kereta berhasil diperbarui.');
     }
 
     public function destroy(Kereta $kereta)
     {
         $kereta->delete();
 
-        return redirect()->route('kereta.index')->with('sukses', 'Kereta berhasil dihapus.');
+        return redirect()->route('admin.kereta.index')->with('sukses', 'Kereta berhasil dihapus.');
     }
 }

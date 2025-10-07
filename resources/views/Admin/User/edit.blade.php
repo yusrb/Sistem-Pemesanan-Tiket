@@ -26,47 +26,77 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-xl p-6 shadow-lg hover:bg-gray-50 transition">
-        <form action="{{ route('user.update', $user) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="nama" class="block text-sm font-semibold text-gray-600 mb-2">Nama</label>
-                    <input type="text" name="nama" id="nama" value="{{ old('nama', $user->nama) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                    @error('nama') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+<div class="bg-white rounded-lg shadow-lg p-6 hover:bg-gray-50 transition">
+            <form action="{{ route('admin.user.update', $user) }}" method="POST" class="space-y-4">
+                @csrf
+                @method('PUT')
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nama" class="block text-sm font-semibold text-gray-600 mb-2">Nama</label>
+                        <div class="relative">
+                            <input type="text" name="nama" id="nama" value="{{ old('nama', $user->nama) }}" class="w-full pl-10 pr-3 py-2 border {{ $errors->has('nama') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Nama">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                            </svg>
+                        </div>
+                        @error('nama') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-600 mb-2">Email</label>
+                        <div class="relative">
+                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="w-full pl-10 pr-3 py-2 border {{ $errors->has('email') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Email">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                            </svg>
+                        </div>
+                        @error('email') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="nik" class="block text-sm font-semibold text-gray-600 mb-2">NIK</label>
+                        <div class="relative">
+                            <input type="text" name="nik" id="nik" value="{{ old('nik', $user->nik) }}" class="w-full pl-10 pr-3 py-2 border {{ $errors->has('nik') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan NIK">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                        </div>
+                        @error('nik') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="no_telepon" class="block text-sm font-semibold text-gray-600 mb-2">No Telepon</label>
+                        <div class="relative">
+                            <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon', $user->no_telepon) }}" class="w-full pl-10 pr-3 py-2 border {{ $errors->has('no_telepon') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan No Telepon">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m-1 14h7m-7-6h7m-7 6h7"/>
+                            </svg>
+                        </div>
+                        @error('no_telepon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-600 mb-2">Password (Kosongkan jika tidak diubah)</label>
+                        <div class="relative">
+                            <input type="password" name="password" id="password" class="w-full pl-10 pr-10 py-2 border {{ $errors->has('password') ? 'border-red-500' : 'border-blue-300' }} rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Password Baru">
+                            <svg class="w-5 h-5 text-blue-700 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        @error('password') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="role" class="block text-sm font-semibold text-gray-600 mb-2">Role</label>
+                        <select name="role" id="role" class="w-full border {{ $errors->has('role') ? 'border-red-500' : 'border-blue-300' }} rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="penumpang" {{ $user->role == 'penumpang' ? 'selected' : '' }}>Penumpang</option>
+                            <option value="petugas" {{ $user->role == 'petugas' ? 'selected' : '' }}>Petugas</option>
+                            <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                        @error('role') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
-                <div>
-                    <label for="nik" class="block text-sm font-semibold text-gray-600 mb-2">NIK</label>
-                    <input type="text" name="nik" id="nik" value="{{ old('nik', $user->nik) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                    @error('nik') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="mt-6 flex gap-3">
+                    <a href="{{ route('admin.user.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
+                    <button type="submit" class="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition transform hover:scale-105">Perbarui User</button>
                 </div>
-                <div>
-                    <label for="no_telepon" class="block text-sm font-semibold text-gray-600 mb-2">No Telepon</label>
-                    <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon', $user->no_telepon) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                    @error('no_telepon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-semibold text-gray-600 mb-2">Password (Kosongkan jika tidak diubah)</label>
-                    <input type="password" name="password" id="password" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                    @error('password') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
-                    <label for="role" class="block text-sm font-semibold text-gray-600 mb-2">Role</label>
-                    <select name="role" id="role" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
-                        <option value="penumpang" {{ $user->role == 'penumpang' ? 'selected' : '' }}>Penumpang</option>
-                        <option value="petugas" {{ $user->role == 'petugas' ? 'selected' : '' }}>Petugas</option>
-                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                    </select>
-                    @error('role') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-            </div>
-            <div class="mt-6 flex gap-3">
-                <a href="{{ route('user.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
-                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Perbarui User</button>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 </main>
 @endsection
 

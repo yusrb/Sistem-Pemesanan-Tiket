@@ -31,7 +31,7 @@
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-lg hover:bg-gray-50 transition">
-        <form action="{{ route('profile.update') }}" method="POST">
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -54,6 +54,14 @@
                     <label for="email" class="block text-sm font-semibold text-gray-600 mb-2">Email</label>
                     <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                     @error('email') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="foto" class="block text-sm font-semibold text-gray-600 mb-2">Foto Profil</label>
+                    <input type="file" name="foto" id="foto" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
+                    @if ($user->foto)
+                        <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="mt-2 w-24 h-24 rounded-full object-cover">
+                    @endif
+                    @error('foto') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="password" class="block text-sm font-semibold text-gray-600 mb-2">Kata Sandi Baru</label>

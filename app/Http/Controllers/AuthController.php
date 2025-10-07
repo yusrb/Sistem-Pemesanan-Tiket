@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,28 +16,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'nik' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        $credentials = $request->only('nik', 'password');
-        $user = User::where('nik', $request->nik)->first();
+        $credentials = $request->only('email', 'password');
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
 
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'petugas') {
                 return redirect()->route('petugas.dashboard');
             } else {
-                return redirect()->route('pemesanan.index');
+                return redirect()->route('penumpangs.dashboard');
             }
         }
 
         return back()->withErrors([
-            'nik' => 'NIK atau password salah.',
-        ])->onlyInput('nik');
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 
     public function showRegisterForm()
@@ -50,7 +49,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:100',
-            'nik' => 'required|string|max:20|unique:users',
+            'email' => 'required|email|max:60|unique:users',
+            'nik' => 'required|string|max:20|unique:users,nik',
             'no_telepon' => 'nullable|string|max:15',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -58,6 +58,7 @@ class AuthController extends Controller
         User::create([
             'nama' => $request->nama,
             'nik' => $request->nik,
+            'email' => $request->email,
             'no_telepon' => $request->no_telepon,
             'password' => Hash::make($request->password),
             'role' => 'penumpang',

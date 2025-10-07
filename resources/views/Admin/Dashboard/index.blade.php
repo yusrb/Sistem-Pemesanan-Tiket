@@ -128,7 +128,7 @@
                 <div class="p-6 border-b border-gray-200">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-bold text-gray-900">Top 5 Jadwal Paling Banyak Dipesan</h3>
-                        <a href="{{ route('jadwal.index') }}" class="text-sm text-indigo-600 hover:text-indigo-800">Lihat Semua</a>
+                        <a href="{{ route('admin.jadwal.index') }}" class="text-sm text-indigo-600 hover:text-indigo-800">Lihat Semua</a>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -147,7 +147,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($jadwals as $jadwal)
-                                <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('jadwal.show', $jadwal) }}'">
+                                <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('admin.jadwal.show', $jadwal) }}'">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
@@ -160,7 +160,10 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->stasiun_awal }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->stasiun_akhir }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->tanggal->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}
+                                    </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->jam_berangkat }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->jam_sampai }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</td>
@@ -182,29 +185,23 @@
             <section class="bg-white rounded-xl p-6 shadow-lg">
                 <h3 class="text-lg font-bold text-gray-900 mb-4">Aksi Cepat</h3>
                 <div class="space-y-3">
-                    <a href="{{ route('kereta.create') }}" class="w-full bg-indigo-600 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                    <a href="{{ route('admin.kereta.create') }}" class="w-full bg-indigo-600 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-transform transform hover:scale-105">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
                         <span>Tambah Kereta</span>
                     </a>
-                    <a href="{{ route('gerbong.create') }}" class="w-full bg-indigo-600 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                    <a href="{{ route('admin.gerbong.create') }}" class="w-full bg-indigo-600 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-transform transform hover:scale-105">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
                         <span>Tambah Gerbong</span>
                     </a>
-                    <a href="{{ route('jadwal.create') }}" class="w-full bg-indigo-500 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-600 transition-transform transform hover:scale-105">
+                    <a href="/jadwal" class="w-full bg-indigo-500 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-600 transition-transform transform hover:scale-105">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <span>Tambah Jadwal</span>
-                    </a>
-                    <a href="{{ route('pemesanan.create') }}" class="w-full bg-indigo-500 text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-600 transition-transform transform hover:scale-105">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"/>
-                        </svg>
-                        <span>Tambah Pemesanan</span>
                     </a>
                 </div>
             </section>

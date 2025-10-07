@@ -30,13 +30,13 @@
     <!-- Search and Quick Action -->
     <div class="bg-white rounded-xl p-6 shadow-lg mb-6 hover:bg-gray-50 transition">
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <form method="GET" action="{{ route('kereta.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            <form method="GET" action="{{ route('admin.kereta.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ $search }}" placeholder="Cari nama kereta..." class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                 </div>
                 <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Cari</button>
             </form>
-            <a href="{{ route('kereta.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
+            <a href="{{ route('admin.kereta.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
@@ -58,13 +58,13 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($keretas as $kereta)
-                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('kereta.show', $kereta) }}'">
+                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('admin.kereta.show', $kereta) }}'">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $kereta->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $kereta->jumlah_gerbong }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('kereta.edit', $kereta) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
-                                    <form action="{{ route('kereta.destroy', $kereta) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus kereta {{ $kereta->nama }}?');">
+                                    <a href="{{ route('admin.kereta.edit', $kereta) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
+                                    <form action="{{ route('admin.kereta.destroy', $kereta) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus kereta {{ $kereta->nama }}?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
@@ -90,7 +90,6 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Update clock
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
@@ -99,7 +98,6 @@
         updateClock();
         setInterval(updateClock, 60000);
 
-        // Notification function
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 transition-all duration-500 transform translate-x-full max-w-sm border`;
@@ -126,7 +124,6 @@
             }, 4000);
         }
 
-        // Table row click handler
         document.querySelectorAll('table tr.cursor-pointer').forEach(row => {
             row.addEventListener('click', (e) => {
                 if (!e.target.closest('a') && !e.target.closest('button')) {
@@ -135,7 +132,6 @@
             });
         });
 
-        // Search form handler
         const searchForm = document.querySelector('form');
         if (searchForm) {
             searchForm.addEventListener('submit', () => {
@@ -146,19 +142,15 @@
             });
         }
 
-        // Tambah Kereta button handler
-        const tambahButton = document.querySelector('a[href="{{ route('kereta.create') }}"]');
+        const tambahButton = document.querySelector('a[href="{{ route('admin.kereta.create') }}"]');
         if (tambahButton) {
             tambahButton.addEventListener('click', () => {
                 showNotification('Menuju tambah kereta', 'info');
             });
         }
 
-        // Session notifications
         @if (session('sukses'))
             showNotification('{{ session('sukses') }}', 'success');
-        @elseif (session('error'))
-            showNotification('{{ session('error') }}', 'error');
         @endif
     });
 </script>

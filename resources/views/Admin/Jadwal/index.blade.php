@@ -28,7 +28,7 @@
 
     <div class="bg-white rounded-xl p-6 shadow-lg mb-6 hover:bg-gray-50 transition">
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <form method="GET" action="{{ route('jadwal.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            <form method="GET" action="{{ route('admin.jadwal.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ $search }}" placeholder="Cari stasiun..." class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
                 </div>
@@ -42,12 +42,14 @@
                 </div>
                 <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Cari</button>
             </form>
-            <a href="{{ route('jadwal.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                </svg>
-                <span>Tambah Jadwal</span>
-            </a>
+            @if (auth()->user()->role === 'admin')
+                <a href="{{ route('admin.jadwal.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition transform hover:scale-105">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <span>Tambah Jadwal</span>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -59,7 +61,6 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kereta</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Stasiun Awal</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Stasiun Akhir</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jam Berangkat</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jam Sampai</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Harga</th>
@@ -68,28 +69,29 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($jadwals as $jadwal)
-                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('jadwal.show', $jadwal) }}'">
+                        <tr class="hover:bg-indigo-50 transition cursor-pointer" onclick="window.location='{{ route('admin.jadwal.show', $jadwal) }}'">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $jadwal->kereta->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->stasiun_awal }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->stasiun_akhir }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->tanggal->format('d/m/Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->jam_berangkat }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $jadwal->jam_sampai }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('jadwal.edit', $jadwal) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
-                                    <form action="{{ route('jadwal.destroy', $jadwal) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus jadwal?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
-                                    </form>
+                                    @if (auth()->user()->role === 'admin')
+                                        <a href="{{ route('admin.jadwal.edit', $jadwal) }}" onclick="event.stopPropagation()" class="text-indigo-600 hover:text-indigo-800 hover:underline">Edit</a>
+                                        <form action="{{ route('admin.jadwal.destroy', $jadwal) }}" method="POST" class="inline" onsubmit="event.stopPropagation(); return confirm('Hapus jadwal, Tuan?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="event.stopPropagation()" class="text-red-600 hover:text-red-800 hover:underline">Hapus</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada jadwal ditemukan.</td>
+                            <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-600">Tidak ada jadwal ditemukan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -142,7 +144,7 @@
         document.querySelectorAll('table tr.cursor-pointer').forEach(row => {
             row.addEventListener('click', (e) => {
                 if (!e.target.closest('a') && !e.target.closest('button')) {
-                    showNotification('Menuju detail jadwal', 'info');
+                    showNotification('Menuju detail jadwal.', 'info');
                 }
             });
         });
@@ -153,15 +155,15 @@
                 const searchValue = document.querySelector('input[name="search"]').value;
                 const keretaValue = document.querySelector('select[name="kereta_id"]').value;
                 if (searchValue || keretaValue) {
-                    showNotification(`Mencari: ${searchValue || 'Semua'} di kereta ${keretaValue ? 'terpilih' : 'Semua'}`, 'info');
+                    showNotification(`Mencari: ${searchValue || 'Semua'} di kereta ${keretaValue ? 'terpilih' : 'Semua'}.`, 'info');
                 }
             });
         }
 
-        const tambahButton = document.querySelector('a[href="{{ route('jadwal.create') }}"]');
+        const tambahButton = document.querySelector('a[href="{{ route('admin.jadwal.create') }}"]');
         if (tambahButton) {
             tambahButton.addEventListener('click', () => {
-                showNotification('Menuju tambah jadwal', 'info');
+                showNotification('Menuju tambah jadwal.', 'info');
             });
         }
 

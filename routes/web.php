@@ -1,6 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\PetugasPemesananController;
 use App\Http\Controllers\{AuthController, UserController, JadwalController, KeretaController, GerbongController, LaporanController, ProfileController, PemesananController, PenumpangController, AdminDashboardController, PetugasDashboardController, PenumpangDashboardController};
 
 Route::get('/', function() {
@@ -8,7 +11,7 @@ Route::get('/', function() {
         return match (Auth::user()->role) {
             'admin' => redirect()->route('admin.dashboard'),
             'petugas' => redirect()->route('petugas.dashboard'),
-            default => redirect()->route('penumpang.dashboard'),
+            default => redirect()->route('penumpangs.dashboard'),
         };
     }
     return redirect()->route('login');
@@ -28,37 +31,70 @@ Route::middleware('auth')->group(function() {
 });
 
 // Admin routes
-Route::middleware(['auth','role:admin'])->group(function() {
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')
+    ->middleware(['auth','role:admin'])
+    ->group(function() {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('admin.dashboard');
 
-    // Kereta & Gerbong
-    Route::resource('kereta', KeretaController::class);
-    Route::resource('gerbong', GerbongController::class);
+        // Kereta & Gerbong
+        Route::resource('/kereta', KeretaController::class)
+            ->parameters(['kereta' => 'kereta'])
+            ->names('admin.kereta');
 
-    // User
-    Route::resource('user', UserController::class);
+        Route::resource('/gerbong', GerbongController::class)
+            ->names('admin.gerbong');
 
-    // Jadwal, Pemesanan, Penumpang
-    Route::resource('jadwal', JadwalController::class);
-    Route::resource('pemesanan', PemesananController::class);
-    Route::resource('penumpang', PenumpangController::class);
+        // Jadwal
+        Route::resource('/jadwal', JadwalController::class)->names('admin.jadwal');
 
-    // Laporan
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    Route::get('/laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
-});
+        // User
+        Route::resource('/user', UserController::class)
+            ->names('admin.user');
 
-Route::resource('jadwal', JadwalController::class)->except(['destroy'])->middleware(['auth', 'role:petugas,admin']);
+        // Penumpang
+        Route::resource('/penumpang', PenumpangController::class)
+            ->names('admin.penumpang');
+
+        // Laporan
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
+        Route::get('/laporan/cetak', [LaporanController::class, 'cetak'])->name('admin.laporan.cetak');
+
+        // Setting
+        Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+    });
+
 
 // Petugas routes
-Route::middleware(['auth','role:petugas'])->group(function() {
+Route::middleware(['role:petugas,admin'])->group(function() {
     Route::get('/petugas/dashboard', [PetugasDashboardController::class, 'index'])->name('petugas.dashboard');
 
     Route::resource('pemesanan', PemesananController::class)->except(['destroy']);
-    Route::resource('penumpang', PenumpangController::class)->except(['destroy']);
+});
+
+Route::prefix('petugas')->middleware(['auth', 'role:petugas'])->name('petugas.')->group(function () {
+    Route::resource('pemesanan', PetugasPemesananController::class)->only(['index', 'show']);
+    Route::post('pemesanan/{pemesanan}/validate', [PetugasPemesananController::class, 'validatePemesanan'])->name('pemesanan.validate');
+    Route::post('pemesanan/{detailPemesanan}/check-in', [PetugasPemesananController::class, 'checkIn'])->name('pemesanan.checkIn');
+    Route::post('pemesanan/{detailPemesanan}/complete', [PetugasPemesananController::class, 'complete'])->name('pemesanan.complete');
 });
 
 // Penumpang routes
-Route::middleware(['auth','role:penumpang'])->group(function() {
-    Route::get('/penumpang/dashboard', [PenumpangDashboardController::class, 'index'])->name('penumpang.dashboard');
-});
+Route::middleware(['auth'])
+    ->prefix('penumpang')
+    ->group(function () {
+        Route::get('dashboard', [PenumpangDashboardController::class, 'index'])
+            ->name('penumpangs.dashboard');
+
+        Route::resource('pemesanan', PemesananController::class);
+        Route::get('pemesanan/{pemesanan}/print', [PemesananController::class, 'print'])->name('pemesanan.print');
+
+        Route::post('pemesanan/{pemesanan}/cancel', [PemesananController::class, 'cancel'])
+            ->name('pemesanan.cancel');
+        Route::get('gerbongs/{jadwal}', [PemesananController::class, 'getGerbongs'])
+    ->name('gerbongs.get');
+
+
+        Route::resource('penumpang', PenumpangController::class);
+    });

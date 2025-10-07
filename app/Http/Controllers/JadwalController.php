@@ -1,28 +1,37 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
 use App\Models\Kereta;
-use Illuminate\Http\Request;use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:admin,petugas');
+    }
+
     public function index(Request $request)
     {
         $search = $request->query('search');
         $kereta_id = $request->query('kereta_id');
-        $keretas = Kereta::all();
-        $jadwals = Jadwal::with('kereta')
-            ->when($search, function ($query, $search) {
+        $query = Jadwal::with('kereta');
+
+        $jadwals = $query->when($search, function ($query, $search) {
                 return $query->where('stasiun_awal', 'like', "%{$search}%")
-                    ->orWhere('stasiun_akhir', 'like', "%{$search}%");
+                             ->orWhere('stasiun_akhir', 'like', "%{$search}%");
             })
             ->when($kereta_id, function ($query, $kereta_id) {
                 return $query->where('kereta_id', $kereta_id);
             })
             ->latest()
             ->paginate(10);
+
+        $keretas = Kereta::all();
         return view('admin.jadwal.index', compact('jadwals', 'keretas', 'search', 'kereta_id'));
     }
 
@@ -36,17 +45,19 @@ class JadwalController extends Controller
     {
         $request->validate([
             'kereta_id' => 'required|exists:keretas,id',
-            'stasiun_awal' => 'required|string|max:255',
-            'stasiun_akhir' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'jam_berangkat' => 'required',
-            'jam_sampai' => 'required',
+            'stasiun_awal' => 'required|string|max:100',
+            'stasiun_akhir' => 'required|string|max:100',
+            'jam_berangkat' => 'required|date_format:H:i',
+            'jam_sampai' => 'required|date_format:H:i',
             'harga' => 'required|numeric|min:0',
         ]);
 
-        Jadwal::create($request->all());
+        $data = $request->all();
+        $data['jam_berangkat'] = \Carbon\Carbon::createFromFormat('H:i', $request->jam_berangkat, 'Asia/Jakarta')->format('H:i');
+        $data['jam_sampai'] = \Carbon\Carbon::createFromFormat('H:i', $request->jam_sampai, 'Asia/Jakarta')->format('H:i');
 
-        return redirect()->route('jadwal.index')->with('sukses', 'Jadwal berhasil ditambahkan.');
+        Jadwal::create($data);
+        return redirect()->route('admin.jadwal.index')->with('sukses', 'Jadwal berhasil ditambahkan.');
     }
 
     public function show(Jadwal $jadwal)
@@ -65,23 +76,24 @@ class JadwalController extends Controller
     {
         $request->validate([
             'kereta_id' => 'required|exists:keretas,id',
-            'stasiun_awal' => 'required|string|max:255',
-            'stasiun_akhir' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'jam_berangkat' => 'required',
-            'jam_sampai' => 'required',
+            'stasiun_awal' => 'required|string|max:100',
+            'stasiun_akhir' => 'required|string|max:100',
+            'jam_berangkat' => 'required|date_format:H:i',
+            'jam_sampai' => 'required|date_format:H:i',
             'harga' => 'required|numeric|min:0',
         ]);
 
-        $jadwal->update($request->all());
+        $data = $request->all();
+        $data['jam_berangkat'] = \Carbon\Carbon::createFromFormat('H:i', $request->jam_berangkat, 'Asia/Jakarta')->format('H:i');
+        $data['jam_sampai'] = \Carbon\Carbon::createFromFormat('H:i', $request->jam_sampai, 'Asia/Jakarta')->format('H:i');
 
-        return redirect()->route('jadwal.index')->with('sukses', 'Jadwal berhasil diperbarui.');
+        $jadwal->update($data);
+        return redirect()->route('admin.jadwal.index')->with('sukses', 'Jadwal berhasil diperbarui.');
     }
 
     public function destroy(Jadwal $jadwal)
     {
         $jadwal->delete();
-
-        return redirect()->route('jadwal.index')->with('sukses', 'Jadwal berhasil dihapus.');
+        return redirect()->route('admin.jadwal.index')->with('sukses', 'Jadwal berhasil dihapus.');
     }
 }

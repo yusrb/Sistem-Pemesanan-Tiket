@@ -28,7 +28,7 @@
 
     <div class="bg-white rounded-xl p-6 shadow-lg mb-6 hover:bg-gray-50 transition">
         <div class="flex flex-col sm:flex-row sm:items-end gap-4">
-            <form method="GET" action="{{ route('laporan.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            <form method="GET" action="{{ route('admin.laporan.index') }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
                 <div class="flex-1">
                     <label for="start_date" class="block text-sm font-semibold text-gray-600 mb-2">Tanggal Mulai</label>
                     <input type="date" name="start_date" id="start_date" value="{{ $start_date }}" class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500">
@@ -50,7 +50,7 @@
                     <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Filter</button>
                 </div>
             </form>
-            <a href="{{ route('laporan.cetak', ['start_date' => $start_date, 'end_date' => $end_date, 'status' => $status]) }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center gap-2">
+            <a href="{{ route('admin.laporan.cetak', ['start_date' => $start_date, 'end_date' => $end_date, 'status' => $status]) }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                 </svg>
@@ -161,7 +161,7 @@
             });
         }
 
-        const cetakButton = document.querySelector('a[href*="{{ route('laporan.cetak') }}"]');
+        const cetakButton = document.querySelector('a[href*="{{ route('admin.laporan.cetak') }}"]');
         if (cetakButton) {
             cetakButton.addEventListener('click', () => {
                 showNotification('Mencetak laporan sebagai PDF', 'info');

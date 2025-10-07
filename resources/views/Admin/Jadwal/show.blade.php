@@ -41,10 +41,6 @@
                 <p class="text-lg text-gray-900">{{ $jadwal->stasiun_akhir }}</p>
             </div>
             <div>
-                <p class="text-sm font-semibold text-gray-600">Tanggal</p>
-                <p class="text-lg text-gray-900">{{ $jadwal->tanggal->format('d/m/Y') }}</p>
-            </div>
-            <div>
                 <p class="text-sm font-semibold text-gray-600">Jam Berangkat</p>
                 <p class="text-lg text-gray-900">{{ $jadwal->jam_berangkat }}</p>
             </div>
@@ -58,13 +54,15 @@
             </div>
         </div>
         <div class="mt-6 flex gap-3">
-            <a href="{{ route('jadwal.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
-            <a href="{{ route('jadwal.edit', $jadwal) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Edit Jadwal</a>
-            <form action="{{ route('jadwal.destroy', $jadwal) }}" method="POST" class="inline" onsubmit="return confirm('Hapus jadwal?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">Hapus Jadwal</button>
-            </form>
+            <a href="{{ route('admin.jadwal.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
+            @if (auth()->user()->role === 'admin')
+                <a href="{{ route('admin.jadwal.edit', $jadwal) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Edit Jadwal</a>
+                <form action="{{ route('admin.jadwal.destroy', $jadwal) }}" method="POST" class="inline" onsubmit="return confirm('Hapus jadwal, Tuan?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">Hapus Jadwal</button>
+                </form>
+            @endif
         </div>
     </div>
 </main>
@@ -110,7 +108,7 @@
         const deleteForm = document.querySelector('form');
         if (deleteForm) {
             deleteForm.addEventListener('submit', () => {
-                showNotification('Menghapus jadwal', 'info');
+                showNotification('Menghapus jadwal.', 'info');
             });
         }
 

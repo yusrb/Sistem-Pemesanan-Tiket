@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_penumpang')
 
 @section('judul', 'Daftar Penumpang - Manajemen Tiket Kereta')
 

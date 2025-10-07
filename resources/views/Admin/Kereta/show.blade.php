@@ -40,9 +40,9 @@
             </div>
         </div>
         <div class="mt-6 flex gap-3">
-            <a href="{{ route('kereta.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
-            <a href="{{ route('kereta.edit', $kereta) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Edit Kereta</a>
-            <form action="{{ route('kereta.destroy', $kereta) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kereta {{ $kereta->nama }}?');">
+            <a href="{{ route('admin.kereta.index') }}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition inline-block text-center">Kembali</a>
+            <a href="{{ route('admin.kereta.edit', $kereta) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition transform hover:scale-105">Edit Kereta</a>
+            <form action="{{ route('admin.kereta.destroy', $kereta) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kereta {{ $kereta->nama }}?');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">Hapus Kereta</button>

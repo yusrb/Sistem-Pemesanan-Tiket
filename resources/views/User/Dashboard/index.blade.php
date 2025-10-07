@@ -1,6 +1,6 @@
 @extends('layouts.app_penumpang')
 
-@section('judul', 'Dashboard Petugas - Manajemen Tiket Kereta')
+@section('judul', 'Dashboard Penumpang - Manajemen Tiket Kereta')
 
 @section('konten')
 <main class="container mx-auto px-4 py-8 max-w-7xl">
@@ -11,7 +11,7 @@
                     <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
                     </svg>
-                    Dashboard Petugas
+                    Dashboard Penumpang
                 </h1>
                 <p class="text-gray-600">Ringkasan pemesanan hari ini, <span class="font-semibold">{{ now()->format('d F Y') }}</span></p>
             </div>

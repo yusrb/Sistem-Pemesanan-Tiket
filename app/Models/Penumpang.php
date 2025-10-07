@@ -9,6 +9,11 @@ class Penumpang extends Model
     protected $table = 'penumpangs';
     protected $fillable = ['nik', 'nama', 'user_id'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function detailPemesanans()
     {
         return $this->hasMany(DetailPemesanan::class);

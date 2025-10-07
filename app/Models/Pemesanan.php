@@ -9,7 +9,7 @@ class Pemesanan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'jadwal_id', 'jumlah_penumpang', 'total_harga', 'status'];
+    protected $fillable = ['user_id', 'jadwal_id', 'jumlah_penumpang', 'total_harga', 'status', 'expired_at'];
 
     public function user()
     {
@@ -25,4 +25,13 @@ class Pemesanan extends Model
     {
         return $this->hasMany(DetailPemesanan::class);
     }
+
+    public function gerbong()
+    {
+        return $this->belongsTo(Gerbong::class, 'gerbong_id');
+    }
+
+    protected $casts = [
+        'tanggal' => 'datetime',
+    ];
 }

@@ -47,7 +47,7 @@ class GerbongController extends Controller
 
         Gerbong::create($request->all());
 
-        return redirect()->route('gerbong.index')->with('sukses', 'Gerbong berhasil ditambahkan.');
+        return redirect()->route('admin.gerbong.index')->with('sukses', 'Gerbong berhasil ditambahkan.');
     }
 
     public function show(Gerbong $gerbong)
@@ -72,13 +72,13 @@ class GerbongController extends Controller
 
         $gerbong->update($request->all());
 
-        return redirect()->route('gerbong.index')->with('sukses', 'Gerbong berhasil diperbarui.');
+        return redirect()->route('admin.gerbong.index')->with('sukses', 'Gerbong berhasil diperbarui.');
     }
 
     public function destroy(Gerbong $gerbong)
     {
         $gerbong->delete();
 
-        return redirect()->route('gerbong.index')->with('sukses', 'Gerbong berhasil dihapus.');
+        return redirect()->route('admin.gerbong.index')->with('sukses', 'Gerbong berhasil dihapus.');
     }
 }
